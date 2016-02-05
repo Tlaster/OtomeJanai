@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>b19fc373-5d64-4171-a567-67a13241b17a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>OtomeJanai.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\ContentLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\InputHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\KeyEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\PointerEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\UIElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Script\Interpreter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Script\Lexer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Script\Parser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Script\Reader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Script\Token.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Content\" />
+  </ItemGroup>
+</Project>
