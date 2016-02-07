@@ -54,6 +54,7 @@ namespace OtomeJanai.Shared
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            
         }
 
         /// <summary>
@@ -63,6 +64,7 @@ namespace OtomeJanai.Shared
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            
         }
 
         /// <summary>
@@ -96,6 +98,12 @@ namespace OtomeJanai.Shared
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        protected override void OnDeactivated(object sender, EventArgs args)
+        {
+            base.OnDeactivated(sender, args);
+            //TODO: Anti-cheats
         }
     }
 }

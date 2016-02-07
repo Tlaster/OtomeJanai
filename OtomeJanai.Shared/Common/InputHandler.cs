@@ -13,6 +13,7 @@ namespace OtomeJanai.Shared.Common
 {
     internal class InputHandler
     {
+        private bool _enableDebugOutput = false;
 
         private static readonly InputHandler _instance = new InputHandler();
         internal static InputHandler Instance => _instance;
@@ -27,12 +28,10 @@ namespace OtomeJanai.Shared.Common
         
         private KeyboardState _prevKeyboardState;
         private MouseState _prevMouseState;
-        private bool _isTouched;
         private TouchLocation? _prevTouchLocation;
+        private bool _isTouched;
         private int _prevScrollWheelValue = 0;
-#if DEBUG
-        private bool _enableDebugOutput = false;
-#endif
+
 
         internal void Update()
         {
