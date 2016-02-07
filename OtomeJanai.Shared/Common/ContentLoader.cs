@@ -23,7 +23,13 @@ namespace OtomeJanai.Shared.Common
 
         internal static async Task<string> GetFileString(string filePath)
         {
-            using (var reader = new StreamReader(GetFileStream(filePath), Encoding.BigEndianUnicode))
+            return await GetFileString(filePath, Encoding.BigEndianUnicode);
+        }
+
+
+        internal static async Task<string> GetFileString(string filePath,Encoding encoding)
+        {
+            using (var reader = new StreamReader(GetFileStream(filePath), encoding))
             {
                 return await reader.ReadToEndAsync();
             }

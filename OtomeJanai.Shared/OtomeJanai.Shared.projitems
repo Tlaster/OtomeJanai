@@ -9,11 +9,19 @@
     <Import_RootNamespace>OtomeJanai.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontModel\FontChar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontModel\FontCommon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontModel\FontFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontModel\FontInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontModel\FontKerning.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontModel\FontPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ContentLoader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\InputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\KeyEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\PointerEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\UIElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extension\XmlReaderExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Script\Interpreter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Script\Lexer.cs" />
@@ -23,5 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Content\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Font.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

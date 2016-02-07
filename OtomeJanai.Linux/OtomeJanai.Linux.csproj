@@ -56,6 +56,8 @@
       <HintPath>..\packages\sharpcompress.0.11.3\lib\net40\SharpCompress.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Tao.Sdl">
       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Linux\Tao.Sdl.dll</HintPath>
     </Reference>

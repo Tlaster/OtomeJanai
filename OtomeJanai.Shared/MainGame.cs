@@ -2,8 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OtomeJanai.Shared.Common;
+using OtomeJanai.Shared.Common.BmFont;
+using OtomeJanai.Shared.Common.BmFont.FontModel;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 
@@ -15,8 +18,10 @@ namespace OtomeJanai.Shared
     /// </summary>
     internal class MainGame : Game
     {
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private FontRenderer _fontRenderer;
+        private bool _isInit;
 
         public MainGame()
         {
@@ -40,8 +45,9 @@ namespace OtomeJanai.Shared
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
+            _fontRenderer = new FontRenderer("Yahei_Light", GraphicsDevice);
+            _isInit = true;
         }
 
         /// <summary>
@@ -96,7 +102,14 @@ namespace OtomeJanai.Shared
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-
+            _spriteBatch.Begin();
+            if (_isInit)
+            {
+                _fontRenderer.DrawText(_spriteBatch, 0, 0, "你测试吗？");
+                _fontRenderer.DrawText(_spriteBatch, 0, 26, "你写代码吗？");
+                _fontRenderer.DrawText(_spriteBatch, 0, 52, "过年写代码你开心吗？");
+            }
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
 
