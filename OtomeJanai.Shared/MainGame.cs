@@ -6,6 +6,7 @@ using OtomeJanai.Shared.Common.BmFont;
 using OtomeJanai.Shared.Common.BmFont.FontModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -22,12 +23,16 @@ namespace OtomeJanai.Shared
         private SpriteBatch _spriteBatch;
         private FontRenderer _fontRenderer;
         private bool _isInit;
+        private SoundEngine _sound;
 
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+
+            _sound = new SoundEngine();
 #if ANDROID
             _graphics.IsFullScreen = true;
             _graphics.PreferredBackBufferWidth = 800;
@@ -60,7 +65,14 @@ namespace OtomeJanai.Shared
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            
+
+            //Test for SoundEngine
+            using (var fstream = ContentLoader.GetFileStream("Songs/SE_9670.OGG"))
+            using (var stream = new MemoryStream())
+            {
+                fstream.CopyTo(stream);
+                _sound.PlayFromBytes(stream.ToArray());
+            }
         }
 
         /// <summary>
@@ -117,6 +129,13 @@ namespace OtomeJanai.Shared
         {
             base.OnDeactivated(sender, args);
             //TODO: Anti-cheats
+
+            _sound.Pause();
+        }
+        protected override void OnActivated(object sender, EventArgs args)
+        {
+            base.OnActivated(sender, args);
+            _sound.Resume();
         }
     }
 }

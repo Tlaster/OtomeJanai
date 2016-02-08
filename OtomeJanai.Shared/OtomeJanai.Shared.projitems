@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ContentLoader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\InputHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\SoundEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\KeyEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\PointerEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\UIElement.cs" />
@@ -34,6 +35,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Font.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Songs.7z">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

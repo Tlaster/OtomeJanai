@@ -36,16 +36,18 @@ namespace OtomeJanai.Shared.Common.BmFont
             }
             foreach (var page in _fontFile.Pages)
             {
-                using (var stream = new MemoryStream())
+                using (var stream = ContentLoader.GetFileStream($"Font/{page.File}"))
+                using (var fstream = new MemoryStream())
                 {
-                    using (var fstream = ContentLoader.GetFileStream($"Font/{page.File}"))
-                        fstream.CopyTo(stream);
-                    _textures.Add(Texture2D.FromStream(device, stream));
+                    stream.CopyTo(fstream);
+                    //On android, fstream.Position isn't 0
+                    fstream.Position = 0;
+                    _textures.Add(Texture2D.FromStream(device, fstream));
                 }
             }
         }
 
-        public void DrawText(SpriteBatch spriteBatch, int x, int y, string text)
+        public void DrawText(SpriteBatch spriteBatch, int x, int y, string text, Color color)
         {
             int dx = x;
             int dy = y;
@@ -54,17 +56,18 @@ namespace OtomeJanai.Shared.Common.BmFont
                 FontChar fc;
                 if (_characterMap.TryGetValue(c, out fc))
                 {
+                    //TODO: Text Wrapping
+                    //TODO: DPI
                     var sourceRectangle = new Rectangle(fc.X, fc.Y, fc.Width, fc.Height);
                     var position = new Vector2(dx + fc.XOffset, dy + fc.YOffset);
-
-                    spriteBatch.Draw(_textures[fc.Page], position, sourceRectangle, Color.White);
+                    spriteBatch.Draw(_textures[fc.Page], position, sourceRectangle, color);
                     dx += fc.XAdvance;
                 }
             }
         }
 
-
-
+        public void DrawText(SpriteBatch spriteBatch, int x, int y, string text)
+            => DrawText(spriteBatch, x, y, text, Color.White);
     }
 
 }
