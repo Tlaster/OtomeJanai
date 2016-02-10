@@ -13,13 +13,17 @@ using Android.Media;
 
 namespace OtomeJanai.Android.Common
 {
-    internal class BytesMediaDataSource : MediaDataSource
+    internal class StreamMediaDataSource : MediaDataSource
     {
         private byte[] _data;
 
-        public BytesMediaDataSource(byte[] data)
+        public StreamMediaDataSource(System.IO.Stream data)
         {
-            _data = data;
+            using (var stream = new System.IO.MemoryStream())
+            {
+                data.CopyTo(stream);
+                _data = stream.ToArray();
+            }
         }
 
         public override long Size

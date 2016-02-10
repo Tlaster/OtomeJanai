@@ -30,6 +30,7 @@ namespace OtomeJanai.UWP
             this.InitializeComponent();
             var launchArguments = string.Empty;
             _game = MonoGame.Framework.XamlGame<MainGame>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
+            
         }
     }
 }

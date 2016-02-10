@@ -6,6 +6,11 @@ using System.Text;
 using Android.Media;
 using OtomeJanai.Android.Common;
 #elif WINDOWS_UWP
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using FFmpegInterop;
+using Windows.Storage.Streams;
+using System.IO;
 
 #elif LINUX
 
@@ -32,7 +37,9 @@ namespace OtomeJanai.Shared.Common
 #if ANDROID
         private MediaPlayer _player;
 #elif WINDOWS_UWP
-
+        private MediaElement _player;
+        private IRandomAccessStream _fileStream;
+        private FFmpegInteropMSS _ffmpegMSS;
 #elif LINUX
 
 #else
@@ -49,7 +56,7 @@ namespace OtomeJanai.Shared.Common
 #if ANDROID
                 return _player.IsPlaying;
 #elif WINDOWS_UWP
-
+                return _player.CurrentState == MediaElementState.Playing;
 #elif LINUX
 
 #else
@@ -65,7 +72,7 @@ namespace OtomeJanai.Shared.Common
 #if ANDROID
                 return _player.Looping;
 #elif WINDOWS_UWP
-
+                return _player.IsLooping;
 #elif LINUX
 
 #else
@@ -77,7 +84,7 @@ namespace OtomeJanai.Shared.Common
 #if ANDROID
                 _player.Looping = value;
 #elif WINDOWS_UWP
-
+                _player.IsLooping = value;
 #elif LINUX
 
 #else
@@ -92,25 +99,36 @@ namespace OtomeJanai.Shared.Common
             _player = new MediaPlayer();
             _player.SetAudioStreamType(Stream.Music);
 #elif WINDOWS_UWP
-
+            _player = new MediaElement();
 #elif LINUX
-
+            
 #else
-
+            
 #endif
         }
 
 
-        internal void PlayFromBytes(byte[] data)
+        internal void PlayFromStream(System.IO.Stream data)
         {
-#if ANDROID
+#if WINDOWS_UWP
+            _player.Stop();
+            _fileStream?.Dispose();
+            _fileStream = null;
+            _ffmpegMSS?.Dispose();
+            _ffmpegMSS = null;
+            var mems = new MemoryStream();
+            data.CopyTo(mems);
+            _fileStream = mems.AsRandomAccessStream();
+            _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, false, false);
+            _player.SetMediaStreamSource(_ffmpegMSS.GetMediaStreamSource());
+            _player.Play();
+#elif ANDROID
+            _player.Stop();
             _player.Reset();
-            //TODO: BytesMediaDataSource required Android 6.0, lower the requirement
-            _player.SetDataSource(new BytesMediaDataSource(data));
+            //TODO: StreamMediaDataSource required Android 6.0, lower the requirement
+            _player.SetDataSource(new StreamMediaDataSource(data));
             _player.Prepare();
             _player.Start();
-#elif WINDOWS_UWP
-            
 #elif LINUX
 
 #else
@@ -120,10 +138,8 @@ namespace OtomeJanai.Shared.Common
 
         internal void Pause()
         {
-#if ANDROID
+#if ANDROID || WINDOWS_UWP
             _player.Pause();
-#elif WINDOWS_UWP
-
 #elif LINUX
 
 #else
@@ -137,7 +153,7 @@ namespace OtomeJanai.Shared.Common
 #if ANDROID
             _player.Start();
 #elif WINDOWS_UWP
-
+            _player.Play();
 #elif LINUX
 
 #else

@@ -67,12 +67,7 @@ namespace OtomeJanai.Shared
             // TODO: use this.Content to load your game content here
 
             //Test for SoundEngine
-            using (var fstream = ContentLoader.GetFileStream("Songs/SE_9670.OGG"))
-            using (var stream = new MemoryStream())
-            {
-                fstream.CopyTo(stream);
-                _sound.PlayFromBytes(stream.ToArray());
-            }
+            _sound.PlayFromStream(ContentLoader.GetFileStream("Songs/SE_9670.OGG"));
         }
 
         /// <summary>
@@ -115,12 +110,17 @@ namespace OtomeJanai.Shared
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
+
             if (_isInit)
             {
+                //Test for FontRenderer
+                
                 _fontRenderer.DrawText(_spriteBatch, 0, 0, "你测试吗？");
                 _fontRenderer.DrawText(_spriteBatch, 0, 26, "你写代码吗？");
                 _fontRenderer.DrawText(_spriteBatch, 0, 52, "过年写代码你开心吗？");
             }
+
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }

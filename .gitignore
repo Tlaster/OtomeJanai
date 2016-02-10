@@ -17,6 +17,7 @@
 [Rr]eleases/
 x64/
 x86/
+ARM/
 build/
 bld/
 [Bb]in/
@@ -210,3 +211,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+*.7z
