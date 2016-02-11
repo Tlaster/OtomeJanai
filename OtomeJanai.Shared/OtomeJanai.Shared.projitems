@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\BmFont\FontRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ContentLoader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\InputHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\NVorbisSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SoundEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\KeyEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\PointerEventArgs.cs" />

@@ -11,28 +11,24 @@ using Windows.UI.Xaml.Media;
 using FFmpegInterop;
 using Windows.Storage.Streams;
 using System.IO;
-
 #elif LINUX
-
+using System.IO;
+using OtomeJanai.Linux.Common;
+using CSCore.Codecs;
+using CSCore.SoundOut;
+using CSCore;
 #else
-
+using CSCore.Codecs;
+using CSCore.SoundOut;
+using CSCore;
+using OtomeJanai.Win32.Common;
+using System.IO;
 #endif
 
 namespace OtomeJanai.Shared.Common
 {
     internal class SoundEngine
     {
-
-#if ANDROID
-
-#elif WINDOWS_UWP
-
-#elif LINUX
-
-#else
-
-#endif
-
         #region Private member
 #if ANDROID
         private MediaPlayer _player;
@@ -40,14 +36,37 @@ namespace OtomeJanai.Shared.Common
         private MediaElement _player;
         private IRandomAccessStream _fileStream;
         private FFmpegInteropMSS _ffmpegMSS;
-#elif LINUX
-
 #else
-
+        private WasapiOut _soundOut;
+        private IWaveSource _source;
+        private bool _isLoop;
 #endif
 
         #endregion
 
+        public double Volume
+        {
+            get
+            {
+#if ANDROID
+                return 0;
+#elif WINDOWS_UWP
+                return _player.Volume;
+#else
+                return _soundOut.Volume;
+#endif
+            }
+            internal set
+            {
+#if ANDROID
+
+#elif WINDOWS_UWP
+                _player.Volume = value;
+#else
+                _soundOut.Volume = (float)value;
+#endif
+            }
+        }
 
         public bool IsPlaying
         {
@@ -57,10 +76,8 @@ namespace OtomeJanai.Shared.Common
                 return _player.IsPlaying;
 #elif WINDOWS_UWP
                 return _player.CurrentState == MediaElementState.Playing;
-#elif LINUX
-
 #else
-
+                return _soundOut.PlaybackState == PlaybackState.Playing;
 #endif
             }
         }
@@ -73,10 +90,8 @@ namespace OtomeJanai.Shared.Common
                 return _player.Looping;
 #elif WINDOWS_UWP
                 return _player.IsLooping;
-#elif LINUX
-
 #else
-
+                return _isLoop;
 #endif
             }
             internal set
@@ -85,10 +100,8 @@ namespace OtomeJanai.Shared.Common
                 _player.Looping = value;
 #elif WINDOWS_UWP
                 _player.IsLooping = value;
-#elif LINUX
-
 #else
-
+                _isLoop = value;
 #endif
             }
         }
@@ -100,15 +113,27 @@ namespace OtomeJanai.Shared.Common
             _player.SetAudioStreamType(Stream.Music);
 #elif WINDOWS_UWP
             _player = new MediaElement();
-#elif LINUX
-            
 #else
-            
+            CodecFactory.Instance.Register("ogg", new CodecFactoryEntry(s => new NVorbisSource(s).ToWaveSource(), ".ogg"));
+            _soundOut = new WasapiOut();
+            _soundOut.Stopped += _soundOut_Stopped;
 #endif
         }
+#if WINDOWS ||LINUX
+        private void _soundOut_Stopped(object sender, PlaybackStoppedEventArgs e)
+        {
+            if (IsLoop)
+            {
+                lock (_soundOut)
+                {
+                    _soundOut.Initialize(_source);
+                    _soundOut.Play();
+                }
+            }
+        }
+#endif
 
-
-        internal void PlayFromStream(System.IO.Stream data)
+        internal async void PlayFromStream(System.IO.Stream data, string fileName)
         {
 #if WINDOWS_UWP
             _player.Stop();
@@ -117,7 +142,7 @@ namespace OtomeJanai.Shared.Common
             _ffmpegMSS?.Dispose();
             _ffmpegMSS = null;
             var mems = new MemoryStream();
-            data.CopyTo(mems);
+            await data.CopyToAsync(mems);
             _fileStream = mems.AsRandomAccessStream();
             _ffmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromStream(_fileStream, false, false);
             _player.SetMediaStreamSource(_ffmpegMSS.GetMediaStreamSource());
@@ -129,10 +154,14 @@ namespace OtomeJanai.Shared.Common
             _player.SetDataSource(new StreamMediaDataSource(data));
             _player.Prepare();
             _player.Start();
-#elif LINUX
-
 #else
-
+            _source?.Dispose();
+            _source = null;
+            var mems = new MemoryStream();
+            await data.CopyToAsync(mems);
+            _source = CodecFactory.Instance.GetCodec(fileName.ToLower(), mems);
+            _soundOut.Initialize(_source);
+            _soundOut.Play();
 #endif
         }
 
@@ -140,10 +169,9 @@ namespace OtomeJanai.Shared.Common
         {
 #if ANDROID || WINDOWS_UWP
             _player.Pause();
-#elif LINUX
-
 #else
-
+            if (_soundOut.PlaybackState == PlaybackState.Playing)
+                _soundOut.Pause();
 #endif
         }
 
@@ -154,10 +182,9 @@ namespace OtomeJanai.Shared.Common
             _player.Start();
 #elif WINDOWS_UWP
             _player.Play();
-#elif LINUX
-
 #else
-
+            if (_soundOut.PlaybackState == PlaybackState.Paused)
+                _soundOut.Resume();
 #endif
         }
 

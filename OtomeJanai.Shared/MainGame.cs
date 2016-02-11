@@ -59,7 +59,7 @@ namespace OtomeJanai.Shared
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        protected override void LoadContent()
+        protected override async void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -67,7 +67,7 @@ namespace OtomeJanai.Shared
             // TODO: use this.Content to load your game content here
 
             //Test for SoundEngine
-            _sound.PlayFromStream(ContentLoader.GetFileStream("Songs/SE_9670.OGG"));
+            _sound.PlayFromStream(await ContentLoader.GetFileStream("Songs/SE_9670.OGG"), "Songs/SE_9670.OGG");
         }
 
         /// <summary>

@@ -17,10 +17,15 @@ namespace OtomeJanai.Shared.Common.BmFont
         private Dictionary<char, FontChar> _characterMap;
         private FontFile _fontFile;
         private List<Texture2D> _textures;
+        private bool _isInit;
         public FontRenderer(string fontName, GraphicsDevice device)
         {
-            //TODO: set the font.7z file "Copy Always" on android and windows 10 platform
-            using (var stream = ContentLoader.GetFileStream($"Font/{fontName}.fnt"))
+            Init(fontName, device);
+        }
+
+        private async void Init(string fontName, GraphicsDevice device)
+        {
+            using (var stream = await ContentLoader.GetFileStream($"Font/{fontName}.fnt"))
             {
                 XmlSerializer deserializer = new XmlSerializer(typeof(FontFile));
                 _fontFile = (FontFile)deserializer.Deserialize(stream);
@@ -36,19 +41,22 @@ namespace OtomeJanai.Shared.Common.BmFont
             }
             foreach (var page in _fontFile.Pages)
             {
-                using (var stream = ContentLoader.GetFileStream($"Font/{page.File}"))
+                using (var stream = await ContentLoader.GetFileStream($"Font/{page.File}"))
                 using (var fstream = new MemoryStream())
                 {
-                    stream.CopyTo(fstream);
+                    await stream.CopyToAsync(fstream);
                     //On android, fstream.Position isn't 0
                     fstream.Position = 0;
                     _textures.Add(Texture2D.FromStream(device, fstream));
                 }
             }
+            _isInit = true;
         }
 
         public void DrawText(SpriteBatch spriteBatch, int x, int y, string text, Color color)
         {
+            if (!_isInit)
+                return;
             int dx = x;
             int dy = y;
             foreach (char c in text)
