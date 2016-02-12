@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-
+#if WINDOWS_UWP
+using Windows.System.Threading;
+#endif
 
 namespace OtomeJanai.Shared
 {
@@ -25,12 +27,27 @@ namespace OtomeJanai.Shared
         private bool _isInit;
         private SoundEngine _sound;
 
+#if WINDOWS_UWP
+        private ThreadPoolTimer _timer;
+#else
+        private System.Timers.Timer _timer;
+#endif
+
+
+
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
+#if WINDOWS_UWP
+            _timer = ThreadPoolTimer.CreatePeriodicTimer(TimerElapsed, TimeSpan.FromSeconds(10));
+#else
+            _timer = new System.Timers.Timer();
+            _timer.Interval = 10000;
+            _timer.Elapsed += TimerElapsed;
+            _timer.Start();
+#endif
 
             _sound = new SoundEngine();
 #if ANDROID
@@ -40,6 +57,26 @@ namespace OtomeJanai.Shared
             _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 #endif
         }
+
+        // From Shadowsocks:
+        // release any unused pages
+        // making the numbers look good in task manager
+        // this is totally nonsense in programming
+        // but good for those users who care
+        // making them happier with their everyday life
+        // which is part of user experience
+#if WINDOWS_UWP
+        private void TimerElapsed(ThreadPoolTimer timer)
+        {
+            GC.Collect();
+        }
+#else
+        private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            GC.Collect();
+        }
+#endif
+
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -119,7 +156,6 @@ namespace OtomeJanai.Shared
                 _fontRenderer.DrawText(_spriteBatch, 0, 26, "你写代码吗？");
                 _fontRenderer.DrawText(_spriteBatch, 0, 52, "过年写代码你开心吗？");
             }
-
 
             _spriteBatch.End();
             base.Draw(gameTime);
