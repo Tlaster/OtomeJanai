@@ -105,6 +105,7 @@ namespace OtomeJanai.Shared
 
             //Test for SoundEngine
             _sound.PlayFromStream(await ContentLoader.GetFileStream("Songs/SE_9670.OGG"), "Songs/SE_9670.OGG");
+            _sound.IsLoop = true;
         }
 
         /// <summary>

@@ -32,6 +32,7 @@ namespace OtomeJanai.Shared.Common
         #region Private member
 #if ANDROID
         private MediaPlayer _player;
+        private float _volume;
 #elif WINDOWS_UWP
         private MediaElement _player;
         private IRandomAccessStream _fileStream;
@@ -44,14 +45,14 @@ namespace OtomeJanai.Shared.Common
 
         #endregion
 
-        public double Volume
+        public float Volume
         {
             get
             {
 #if ANDROID
-                return 0;
+                return _volume;
 #elif WINDOWS_UWP
-                return _player.Volume;
+                return Convert.ToSingle(_player.Volume);
 #else
                 return _soundOut.Volume;
 #endif
@@ -59,11 +60,12 @@ namespace OtomeJanai.Shared.Common
             internal set
             {
 #if ANDROID
-
+                _volume = value;
+                _player.SetVolume(value, value);
 #elif WINDOWS_UWP
                 _player.Volume = value;
 #else
-                _soundOut.Volume = (float)value;
+                _soundOut.Volume = value;
 #endif
             }
         }
@@ -124,10 +126,13 @@ namespace OtomeJanai.Shared.Common
         {
             if (IsLoop)
             {
-                lock (_soundOut)
+                lock (_source)
                 {
-                    _soundOut.Initialize(_source);
-                    _soundOut.Play();
+                    lock (_soundOut)
+                    {
+                        _source.SetPosition(TimeSpan.FromMinutes(0));
+                        _soundOut.Play();
+                    }
                 }
             }
         }
