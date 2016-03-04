@@ -1,13 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OtomeJanai.Shared.Common.BmFont.FontModel;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace OtomeJanai.Shared.Common.BmFont
@@ -62,15 +57,14 @@ namespace OtomeJanai.Shared.Common.BmFont
             foreach (char c in text)
             {
                 FontChar fc;
-                if (_characterMap.TryGetValue(c, out fc))
-                {
-                    //TODO: Text Wrapping
-                    //TODO: DPI
-                    var sourceRectangle = new Rectangle(fc.X, fc.Y, fc.Width, fc.Height);
-                    var position = new Vector2(dx + fc.XOffset, dy + fc.YOffset);
-                    spriteBatch.Draw(_textures[fc.Page], position, sourceRectangle, color);
-                    dx += fc.XAdvance;
-                }
+                if (!_characterMap.TryGetValue(c, out fc))
+                    continue;
+                //TODO: Text Wrapping
+                //TODO: DPI
+                var sourceRectangle = new Rectangle(fc.X, fc.Y, fc.Width, fc.Height);
+                var position = new Vector2(dx + fc.XOffset, dy + fc.YOffset);
+                spriteBatch.Draw(_textures[fc.Page], position, sourceRectangle, color);
+                dx += fc.XAdvance;
             }
         }
 

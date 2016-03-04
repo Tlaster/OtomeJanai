@@ -20,9 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\InputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\NVorbisSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SoundEngine.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\KeyEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Events\PointerEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\UIElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extension\XmlReaderExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Script\Interpreter.cs" />
@@ -30,6 +27,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Script\Parser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Script\Reader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Script\Token.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Common\Exception\Exception.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Common\Generator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Page.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\UIElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Entity\Colors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Entity\Thickness.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Events\KeyEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Events\PointerEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Content\" />

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 #if ANDROID
 using Android.Media;
@@ -34,7 +32,7 @@ namespace OtomeJanai.Shared.Common
         private MediaPlayer _player;
         private float _volume;
 #elif WINDOWS_UWP
-        private MediaElement _player;
+        private readonly MediaElement _player;
         private IRandomAccessStream _fileStream;
         private FFmpegInteropMSS _ffmpegMSS;
 #else

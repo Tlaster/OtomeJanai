@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using OtomeJanai.Shared.Common;
 using OtomeJanai.Shared.Common.BmFont;
 using OtomeJanai.Shared.Common.BmFont.FontModel;
+using OtomeJanai.Shared.UI.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,8 +44,7 @@ namespace OtomeJanai.Shared
 #if WINDOWS_UWP
             _timer = ThreadPoolTimer.CreatePeriodicTimer(TimerElapsed, TimeSpan.FromSeconds(10));
 #else
-            _timer = new System.Timers.Timer();
-            _timer.Interval = 10000;
+            _timer = new System.Timers.Timer {Interval = 10000};
             _timer.Elapsed += TimerElapsed;
             _timer.Start();
 #endif
@@ -89,6 +89,20 @@ namespace OtomeJanai.Shared
             // TODO: Add your initialization logic here
             base.Initialize();
             _fontRenderer = new FontRenderer("Yahei_Light", GraphicsDevice);
+
+            var data =
+@"
+<Page Name='page'>
+    <Page Name='grid1' Padding='1'>
+        <Page Name='grid2' Padding='1,2'>
+        </Page>
+        <Page Name='grid3' Padding='1,2,3,4'>
+        </Page>
+    </Page>
+</Page>
+";
+            Generator.Instance.GenerateTree(data);
+
             _isInit = true;
         }
 

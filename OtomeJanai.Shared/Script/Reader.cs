@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace OtomeJanai.Shared.Script
 {
@@ -22,8 +20,8 @@ namespace OtomeJanai.Shared.Script
                 block.Add(parser.Block);
                 parser.Reset();
                 if (block[block.Count - 1].Type == TokenType.Setting)
-                /// ACC will not push current item,
-                /// it will cause error
+                // ACC will not push current item,
+                // it will cause error
                 {
                     parser.Push(item);
                 }

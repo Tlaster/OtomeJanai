@@ -19,8 +19,8 @@ namespace OtomeJanai.Shared.Common
         /// <returns></returns>
         internal static async Task<Stream> GetFileStream(string filePath)
         {
-            var pattern = @"[A-Z_a-z][A-Z_a-z0-9\.]*";
-            Regex regex = new Regex(pattern);
+            const string pattern = @"[A-Z_a-z][A-Z_a-z0-9\.]*";
+            var regex = new Regex(pattern);
             var matches = regex.Matches(filePath);
             var fstream = TitleContainer.OpenStream($"{matches[0].Value}.7z");
             var stream = new MemoryStream();
@@ -28,7 +28,7 @@ namespace OtomeJanai.Shared.Common
             var archive = ArchiveFactory.Open(stream);
             var filePathInZip = filePath.Remove(0, matches[0].Value.Length + 1);
             //OpenEntryStream will return ReadOnlySubStream which is not seekable
-            return archive.Entries.Where(item => item.Key.ToLower() == filePathInZip.ToLower()).FirstOrDefault()?.OpenEntryStream();
+            return archive.Entries.FirstOrDefault(item => string.Equals(item.Key, filePathInZip, StringComparison.CurrentCultureIgnoreCase))?.OpenEntryStream();
         }
 
         internal static async Task<string> GetFileString(string filePath)

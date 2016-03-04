@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OtomeJanai.Shared.Controls.Events
+namespace OtomeJanai.Shared.UI.Events
 {
     internal class PointerEventArgs : EventArgs
     {

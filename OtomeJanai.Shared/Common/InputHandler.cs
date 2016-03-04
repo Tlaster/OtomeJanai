@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
-using OtomeJanai.Shared.Controls.Events;
+using OtomeJanai.Shared.UI.Events;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework;
 using System.Reflection;
@@ -15,8 +15,7 @@ namespace OtomeJanai.Shared.Common
     {
         private bool _enableDebugOutput = false;
 
-        private static readonly InputHandler _instance = new InputHandler();
-        internal static InputHandler Instance => _instance;
+        public static InputHandler Instance { get; } = new InputHandler();
 
         internal event EventHandler<PointerEventArgs> PointerMoved;
         internal event EventHandler<PointerEventArgs> PointerPressed;
@@ -31,7 +30,6 @@ namespace OtomeJanai.Shared.Common
         private TouchLocation? _prevTouchLocation;
         private bool _isTouched;
         private int _prevScrollWheelValue = 0;
-
 
         internal void Update()
         {
